@@ -14,3 +14,9 @@ def test_qgenerator_types():
         qstring = question.get_question()
         assert set(qstring).isdisjoint(set('÷+-'))
         assert qstring.endswith('_')
+
+    questions = qg.generate_questions([6, 7], [QType.XDIVISION])
+    for question in questions:
+        qstring = question.get_question()
+        assert set(qstring).isdisjoint(set('+-'))
+        assert not qstring.endswith('_')
