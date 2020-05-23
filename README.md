@@ -1,2 +1,2 @@
 # mathsfunlib
-Maths tables speed test question generator library
+Maths tables speed test questions generator library
