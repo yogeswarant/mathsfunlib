@@ -157,13 +157,12 @@ class_map = {
 }
 
 
-def generate_questions(tables, types):
-    total_count = len(tables) * 10
-    print("total_count: {}".format(total_count))
-    for _ in range(total_count):
+def generate_questions(tables, types, total_questions=None):
+    if total_questions is None:
+        total_questions = len(tables) * 10
+    print("total_count: {}".format(total_questions))
+    for _ in range(total_questions):
         qtype = random.choice(types)
         gc = class_map.get(qtype)
         question = gc(tables).get()
         yield question
-
-
