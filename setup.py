@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mathsfunlib", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Yogeswaran Thulasidoss",
     author_email="yogeeswaran@gmail.com",
     description="Maths speed test question generator",
