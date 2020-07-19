@@ -5,11 +5,19 @@ from enum import Enum
 MAX_TABLE = 12
 
 
+class DifficultyLevel(Enum):
+    EASY = 1
+    MEDIUM = 2
+    HARD = 3
+
+
 class QType(Enum):
     MULTIPLICATION = 1
     XMULTIPLICATION = 2
     DIVISION = 3
     XDIVISION = 4
+    ADDITION = 5
+    ADDSUB = 6
 
 
 class Question(object):
@@ -27,7 +35,7 @@ class Question(object):
 
 class MultiplicationQuestion(Question):
     def __init__(self, x, y):
-        super(Question, self).__init__()
+        super(MultiplicationQuestion, self).__init__()
         self.qtype = QType.MULTIPLICATION
         self.x = x
         self.y = y
@@ -43,7 +51,7 @@ class MultiplicationQuestion(Question):
 
 class DivisionQuestion(Question):
     def __init__(self, x, y):
-        super(Question, self).__init__()
+        super(DivisionQuestion, self).__init__()
         self.qtype = QType.DIVISION
         self.x = x
         self.y = y
@@ -60,7 +68,7 @@ class DivisionQuestion(Question):
 
 class XMultiplicationQuestion(Question):
     def __init__(self, x, y):
-        super(Question, self).__init__()
+        super(XMultiplicationQuestion, self).__init__()
         self.qtype = QType.XMULTIPLICATION
         self.x = x
         self.y = y
@@ -82,7 +90,7 @@ class XMultiplicationQuestion(Question):
 
 class XDivisionQuestion(Question):
     def __init__(self, x, y):
-        super(Question, self).__init__()
+        super(XDivisionQuestion, self).__init__()
         self.qtype = QType.XDIVISION
         self.x = x
         self.y = y
@@ -100,6 +108,28 @@ class XDivisionQuestion(Question):
 
     def __str__(self):
         return self.qstring
+
+
+class AdditionQuestion(Question):
+    def __init__(self, numbers):
+        super(AdditionQuestion, self).__init__()
+        self.qtype = QType.ADDITION
+        self.numbers = numbers
+        self.qstring = " + ".join(str(num) for num in self.numbers) + " = "
+        self.answer = sum(numbers)
+
+    def __repr__(self):
+        return "{} answer = {}".format(self.qstring, self.answer)
+
+    def __str__(self):
+        return self.qstring
+
+
+class AddSubQuestion(AdditionQuestion):
+    def __init__(self, numbers):
+        super(AddSubQuestion, self).__init__(numbers)
+        self.qtype = QType.ADDSUB
+        self.qstring = self.qstring.replace("+ -", "- ")
 
 
 class QGenertor(object):
@@ -153,7 +183,9 @@ class_map = {
     QType.MULTIPLICATION: MQGenerator,
     QType.XMULTIPLICATION: XMQGenerator,
     QType.DIVISION: DQGenerator,
-    QType.XDIVISION: XDQGenerator
+    QType.XDIVISION: XDQGenerator,
+    # QType.ADDITION: AQGenerator,
+    # QType.ADDSUB: ASQGenerator
 }
 
 
