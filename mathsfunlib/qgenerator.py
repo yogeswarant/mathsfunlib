@@ -1,5 +1,4 @@
 import random
-import time
 from enum import Enum
 
 MAX_TABLE = 12
@@ -115,7 +114,7 @@ class AdditionQuestion(Question):
         super(AdditionQuestion, self).__init__()
         self.qtype = QType.ADDITION
         self.numbers = numbers
-        self.qstring = " + ".join(str(num) for num in self.numbers) + " = "
+        self.qstring = " + ".join(str(num) for num in self.numbers) + " = _"
         self.answer = sum(numbers)
 
     def __repr__(self):
@@ -179,22 +178,57 @@ class XDQGenerator(QGenertor):
         return XDivisionQuestion(self.x, self.y)
 
 
+class AQGenerator(object):
+    def __init__(self, r, d):
+        self.r = r
+        self.d = d
+
+    def get(self):
+        rows = random.randint(2, self.r)
+        digits = random.randint(2, self.d)
+        numbers = []
+        for _ in range(rows):
+            numbers.append(random.randint(2, int('9' * digits)))
+        return AdditionQuestion(numbers)
+
+
+class ASQGenerator(AQGenerator):
+    def __init__(self, r, d):
+        super(ASQGenerator, self).__init__(r, d)
+
+    def get(self):
+        rows = random.randint(2, self.r)
+        digits = random.randint(2, self.d)
+        numbers = []
+        for _ in range(rows):
+            number = random.randint(2, int('9' * digits))
+            sign = 1
+            if number < sum(numbers):
+                sign = random.choice([1, -1])
+            numbers.append(number * sign)
+
+        return AddSubQuestion(numbers)
+
+
 class_map = {
     QType.MULTIPLICATION: MQGenerator,
     QType.XMULTIPLICATION: XMQGenerator,
     QType.DIVISION: DQGenerator,
     QType.XDIVISION: XDQGenerator,
-    # QType.ADDITION: AQGenerator,
-    # QType.ADDSUB: ASQGenerator
+    QType.ADDITION: AQGenerator,
+    QType.ADDSUB: ASQGenerator
 }
 
 
-def generate_questions(tables, types, total_questions=None):
-    if total_questions is None:
-        total_questions = len(tables) * 10
+def generate_questions(total_questions, types, tables, dimension):
     print("total_count: {}".format(total_questions))
     for _ in range(total_questions):
         qtype = random.choice(types)
         gc = class_map.get(qtype)
-        question = gc(tables).get()
+        if qtype in [QType.ADDITION, QType.ADDSUB]:
+            r, d = [int(x) for x in dimension.lower().replace(' ', '').split('x')]
+            print(f"r={r}d={d}")
+            question = gc(r, d).get()
+        else:
+            question = gc(tables).get()
         yield question

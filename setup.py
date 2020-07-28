@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="mathsfunlib", # Replace with your own username
-    version="0.0.2",
+    name="mathsfunlib",
+    version="0.0.3",
     author="Yogeswaran Thulasidoss",
     author_email="yogeeswaran@gmail.com",
     description="Maths speed test question generator",
